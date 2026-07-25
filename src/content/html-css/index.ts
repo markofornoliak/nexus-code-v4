@@ -1,0 +1,722 @@
+import { appendCurriculumWorld, createCurriculumTrack } from "../_shared/defineLesson";
+import { patternBonus, patternTask } from "../_shared/taskBuilders";
+import { htmlCssV4World } from "../v4/htmlCssWorld";
+
+const webTask = (
+  id: string,
+  title: string,
+  description: string,
+  expectedBehavior: string,
+  starterCode: string,
+  pattern: string,
+  hints: string[],
+) =>
+  patternTask(
+    { id, title, description, expectedBehavior, starterCode, hints },
+    pattern,
+    "is",
+  );
+
+const webBonus = (
+  id: string,
+  title: string,
+  description: string,
+  expectedBehavior: string,
+  starterCode: string,
+  pattern: string,
+  hints: string[],
+  discoveryText: string,
+) =>
+  patternBonus(
+    { id, title, description, expectedBehavior, starterCode, hints },
+    pattern,
+    discoveryText,
+    "is",
+  );
+
+const baseTrack = createCurriculumTrack({
+  id: "html-css",
+  order: 3,
+  language: "HTML / CSS",
+  title: "Interface Fossils",
+  archiveName: "The Visual Strata",
+  description:
+    "Excavate semantic HTML, accessible interaction, CSS layout, and responsive interface systems in a live sandboxed preview.",
+  icon: "<>",
+  accent: "coral",
+  execution: {
+    kind: "web-preview",
+    editorLanguage: "html",
+    fileExtension: "html",
+    supportsStdin: false,
+    actionLabel: "Render & validate",
+    runtimeLabel: "Sandboxed HTML preview",
+  },
+  worlds: [
+    {
+      id: "semantic-strata",
+      title: "Semantic Strata",
+      subtitle: "Structure content so people and machines understand it",
+      description:
+        "Documents, landmarks, navigation, forms, and accessible components reveal the meaning beneath visual surfaces.",
+      landmark: "The Document Monolith",
+      accent: "amber",
+      lessons: [
+        {
+          id: "html-document",
+          title: "Document Skeleton",
+          subtitle: "Build a valid page foundation",
+          objectives: [
+            "Declare an HTML5 document",
+            "Separate head metadata from body content",
+            "Set language, title, and viewport",
+          ],
+          conceptHeading: "A document skeleton establishes meaning before decoration",
+          explanation: [
+            "The doctype selects modern HTML parsing. The html element wraps the document, head contains metadata, and body contains content rendered for the reader.",
+            "A language attribute helps pronunciation and translation tools. The viewport meta tag lets responsive layouts match the device width.",
+          ],
+          bullets: [
+            "Use <!doctype html> once at the top.",
+            "Give every page a specific title.",
+            "Declare UTF-8 and a responsive viewport.",
+          ],
+          syntax:
+            '<!doctype html>\n<html lang="en">\n  <head>…</head>\n  <body>…</body>\n</html>',
+          example: {
+            title: "Minimal archive page",
+            description: "Metadata and visible content occupy separate regions.",
+            code: '<!doctype html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Archive</title>\n</head>\n<body>\n  <h1>Archive online</h1>\n</body>\n</html>',
+          },
+          fieldNote:
+            "Validate structure before styling; CSS cannot repair missing document meaning.",
+          mistakes: [
+            "Putting visible headings inside head.",
+            "Omitting a page title.",
+            "Using a visual zoom workaround instead of the viewport declaration.",
+          ],
+          tasks: [
+            webTask(
+              "html-document-language",
+              "Complete the root document",
+              "Add the HTML5 doctype and set the root language to en.",
+              'The source contains a doctype and <html lang="en">.',
+              "<html>\n<head><title>NEXUS Field Note</title></head>\n<body><h1>Signal online</h1></body>\n</html>",
+              "<!doctype\\s+html>[\\s\\S]*<html\\s+[^>]*lang=[\"']en[\"']",
+              ["Place the doctype before the html element."],
+            ),
+            webTask(
+              "html-document-viewport",
+              "Add responsive metadata",
+              "Add UTF-8 charset and a viewport configured to device width.",
+              "Both metadata declarations appear in head.",
+              '<!doctype html>\n<html lang="en">\n<head>\n  <title>Archive</title>\n  <!-- Add metadata -->\n</head>\n<body><h1>Archive</h1></body>\n</html>',
+              "<meta\\s+[^>]*charset=[\"']?utf-8[\"']?[^>]*>[\\s\\S]*<meta\\s+[^>]*name=[\"']viewport[\"'][^>]*content=[\"'][^\"']*width=device-width",
+              ["Both elements belong in head."],
+            ),
+          ],
+          bonusTask: webBonus(
+            "html-document-bonus",
+            "Complete field document",
+            "Create a complete English document titled NEXUS Report with one h1 inside body.",
+            "The preview renders a titled report and the source contains the complete skeleton.",
+            "<!-- Build the complete document -->",
+            "<!doctype\\s+html>[\\s\\S]*<html\\s+[^>]*lang=[\"']en[\"'][\\s\\S]*<title>\\s*NEXUS Report\\s*</title>[\\s\\S]*<body>[\\s\\S]*<h1>[^<]+</h1>[\\s\\S]*</body>",
+            ["Use the example skeleton, but write your own visible heading."],
+            "The Document Monolith recognizes a complete structural signature.",
+          ),
+        },
+        {
+          id: "html-landmarks",
+          title: "Landmark Excavation",
+          subtitle: "Organize pages with semantic regions and headings",
+          objectives: [
+            "Use header, nav, main, section, and footer",
+            "Create a logical heading hierarchy",
+            "Choose elements by meaning",
+          ],
+          conceptHeading: "Landmarks make a page navigable beyond its visual layout",
+          explanation: [
+            "Semantic elements describe the purpose of a region. Assistive technologies can expose landmarks as shortcuts, and maintainers can understand structure without decoding class names.",
+            "Headings form a document outline. Use one descriptive h1 for the page and descend levels without choosing headings merely for font size.",
+          ],
+          bullets: [
+            "main contains the primary unique content.",
+            "nav wraps major navigation links.",
+            "section usually needs a heading.",
+          ],
+          syntax: "<header>…</header>\n<nav>…</nav>\n<main>…</main>\n<footer>…</footer>",
+          example: {
+            title: "Semantic expedition page",
+            description: "Each region names its role directly.",
+            code: '<header><h1>NEXUS Archive</h1></header>\n<nav aria-label="Primary"><a href="#map">Map</a></nav>\n<main id="map"><section><h2>Expedition</h2><p>Online.</p></section></main>\n<footer>NX / 01</footer>',
+          },
+          fieldNote:
+            "Semantic HTML is the first accessibility layer and usually reduces the number of custom ARIA roles needed.",
+          mistakes: [
+            "Using div for every region.",
+            "Skipping from h1 to h4 for visual size.",
+            "Placing repeated site navigation inside main.",
+          ],
+          tasks: [
+            webTask(
+              "html-landmarks-main",
+              "Restore primary landmarks",
+              "Replace generic wrappers with header, main, and footer elements.",
+              "The source contains all three semantic landmarks.",
+              "<div><h1>NEXUS</h1></div>\n<div><p>Primary archive content.</p></div>\n<div>NX / 01</div>",
+              "<header[\\s>][\\s\\S]*<main[\\s>][\\s\\S]*<footer[\\s>]",
+              ["Change opening and closing tags together."],
+            ),
+            webTask(
+              "html-landmarks-headings",
+              "Build a logical outline",
+              "Create one h1 for Archive and two h2 section headings: Map and Relics.",
+              "The source has one h1 followed by both h2 headings.",
+              "<main>\n  <!-- Add the page and section headings -->\n  <section><p>Map content</p></section>\n  <section><p>Relic content</p></section>\n</main>",
+              "<h1>\\s*Archive\\s*</h1>[\\s\\S]*<h2>\\s*Map\\s*</h2>[\\s\\S]*<h2>\\s*Relics\\s*</h2>",
+              ["Headings belong inside the regions they describe."],
+            ),
+          ],
+          bonusTask: webBonus(
+            "html-landmarks-bonus",
+            "Semantic field station",
+            "Build header, labeled nav, main with two headed sections, and footer.",
+            "The page exposes a complete semantic landmark route.",
+            '<!doctype html>\n<html lang="en"><head><title>Field Station</title></head>\n<body>\n  <!-- Build semantic station regions -->\n</body></html>',
+            "<header[\\s>][\\s\\S]*<nav\\s+[^>]*aria-label=[\"'][^\"']+[\"'][\\s\\S]*<main[\\s>][\\s\\S]*<section[\\s>][\\s\\S]*<h2[\\s>][\\s\\S]*<section[\\s>][\\s\\S]*<h2[\\s>][\\s\\S]*<footer[\\s>]",
+            ["Give the nav an aria-label that explains its links."],
+            "A navigable landmark route appears across the Semantic Strata.",
+          ),
+        },
+        {
+          id: "html-navigation",
+          title: "Link Cartography",
+          subtitle: "Connect pages and organize related items",
+          objectives: [
+            "Write meaningful links",
+            "Choose ordered or unordered lists",
+            "Build keyboard-native navigation",
+          ],
+          conceptHeading: "Links describe destinations; lists describe relationships",
+          explanation: [
+            "The anchor element creates navigation to a URL or page fragment. Its visible text should make sense outside the surrounding sentence.",
+            "Navigation choices are a related set and naturally belong in a list. Use an ordered list only when sequence or rank carries meaning.",
+          ],
+          bullets: [
+            "Use real anchors for navigation.",
+            "Avoid vague link text such as click here.",
+            "Match list type to the content relationship.",
+          ],
+          syntax: '<ul><li><a href="#python">Python track</a></li></ul>',
+          example: {
+            title: "Keyboard-native track navigation",
+            description: "No scripting is required for standard link behavior.",
+            code: '<nav aria-label="Tracks">\n  <ul>\n    <li><a href="#python">Python expedition</a></li>\n    <li><a href="#web">Web expedition</a></li>\n  </ul>\n</nav>',
+          },
+          fieldNote:
+            "Use a button for an action that changes the current interface, and a link for navigation to another location.",
+          mistakes: [
+            "Using a clickable div instead of a link.",
+            "Opening every link in a new tab.",
+            "Using an ordered list when order has no meaning.",
+          ],
+          tasks: [
+            webTask(
+              "html-navigation-anchor",
+              "Create a descriptive link",
+              "Link the text Open Python expedition to #python.",
+              "The link has a destination and descriptive text.",
+              '<p><!-- Add the expedition link --></p>\n<section id="python"><h2>Python</h2></section>',
+              "<a\\s+[^>]*href=[\"']#python[\"'][^>]*>\\s*Open Python expedition\\s*</a>",
+              ["Place visible text between the anchor tags."],
+            ),
+            webTask(
+              "html-navigation-list",
+              "Structure track navigation",
+              "Create a nav labeled Learning tracks containing a ul with at least three linked list items.",
+              "The navigation is a labeled list of links.",
+              "<nav>\n  <!-- Add accessible track navigation -->\n</nav>",
+              "<nav\\s+[^>]*aria-label=[\"']Learning tracks[\"'][\\s\\S]*<ul[\\s>](?:[\\s\\S]*<li[\\s>][\\s\\S]*<a\\s+[^>]*href=){3}",
+              ["Each link belongs inside its own li."],
+            ),
+          ],
+          bonusTask: webBonus(
+            "html-navigation-bonus",
+            "Expedition table of contents",
+            "Create a nav with links to three headed sections using matching fragment IDs.",
+            "Every table-of-contents link reaches an existing section.",
+            '<nav aria-label="On this page">\n  <!-- Three links -->\n</nav>\n<main>\n  <!-- Three sections with matching ids and h2 headings -->\n</main>',
+            "href=[\"']#one[\"'][\\s\\S]*href=[\"']#two[\"'][\\s\\S]*href=[\"']#three[\"'][\\s\\S]*id=[\"']one[\"'][\\s\\S]*id=[\"']two[\"'][\\s\\S]*id=[\"']three[\"']",
+            ["Use #one, #two, and #three in href and omit # in each id."],
+            "A precise table of contents charts the excavated document.",
+          ),
+        },
+        {
+          id: "html-forms",
+          title: "Input Instruments",
+          subtitle: "Build labeled, native form controls",
+          objectives: [
+            "Associate labels and inputs",
+            "Choose appropriate input types",
+            "Group controls in a form",
+          ],
+          conceptHeading: "Native controls carry behavior and accessibility by default",
+          explanation: [
+            "A label names a form control and expands its clickable area. Associate it with the input by matching label for and input id.",
+            "Input types such as email, number, and checkbox provide relevant keyboards, validation hints, and semantics before any JavaScript is added.",
+          ],
+          bullets: [
+            "Every input needs an accessible name.",
+            'Use button type="submit" for form submission.',
+            "Use required only when the field is truly mandatory.",
+          ],
+          syntax:
+            '<label for="name">Name</label>\n<input id="name" name="name" required>',
+          example: {
+            title: "Labeled operator field",
+            description: "The label activates and names the input.",
+            code: '<form>\n  <label for="operator">Operator name</label>\n  <input id="operator" name="operator" autocomplete="name" required>\n  <button type="submit">Save profile</button>\n</form>',
+          },
+          fieldNote:
+            "Placeholder text is an example or hint, not a replacement for a persistent label.",
+          mistakes: [
+            "Using placeholder as the only label.",
+            "Reusing one id for several inputs.",
+            "Allowing a utility button to submit a form accidentally.",
+          ],
+          tasks: [
+            webTask(
+              "html-forms-label",
+              "Connect a label",
+              "Add a label Operator email connected to the email input.",
+              "The label for and input id match.",
+              '<form>\n  <!-- Add label -->\n  <input type="email" name="email">\n</form>',
+              "<label\\s+[^>]*for=[\"']operator-email[\"'][^>]*>\\s*Operator email\\s*</label>[\\s\\S]*<input\\s+[^>]*id=[\"']operator-email[\"'][^>]*type=[\"']email[\"']",
+              ['Add id="operator-email" to the input.'],
+            ),
+            webTask(
+              "html-forms-submit",
+              "Complete a native form",
+              "Create a required text input named callSign and a submit button labeled Join expedition.",
+              "The form has a named required field and explicit submit control.",
+              "<form>\n  <label>Call sign</label>\n  <!-- Add input and button -->\n</form>",
+              "<input\\s+[^>]*name=[\"']callSign[\"'][^>]*required[^>]*>[\\s\\S]*<button\\s+[^>]*type=[\"']submit[\"'][^>]*>\\s*Join expedition\\s*</button>",
+              ["A boolean required attribute needs no value."],
+            ),
+          ],
+          bonusTask: webBonus(
+            "html-forms-bonus",
+            "Accessible expedition request",
+            "Build a form with labeled name, email, and track select controls plus a submit button.",
+            "All three controls have unique IDs and associated labels.",
+            "<form>\n  <!-- Build the expedition request -->\n</form>",
+            "<label\\s+[^>]*for=[\"']name[\"'][\\s\\S]*id=[\"']name[\"'][\\s\\S]*<label\\s+[^>]*for=[\"']email[\"'][\\s\\S]*id=[\"']email[\"'][\\s\\S]*<label\\s+[^>]*for=[\"']track[\"'][\\s\\S]*<select\\s+[^>]*id=[\"']track[\"'][\\s\\S]*<button\\s+[^>]*type=[\"']submit[\"']",
+            ["Use matching name, email, and track values for each for/id pair."],
+            "The Input Instruments begin collecting accessible field data.",
+          ),
+        },
+        {
+          id: "html-accessible-card",
+          title: "Component Fossil",
+          subtitle: "Assemble a semantic, accessible content card",
+          objectives: [
+            "Choose article for standalone content",
+            "Provide useful image alternatives",
+            "Keep actions and headings meaningful",
+          ],
+          conceptHeading:
+            "A component remains accessible when its HTML contract is complete",
+          explanation: [
+            "An article represents a self-contained item that could stand in a feed or search result. Its heading gives the item a name and its content order should remain logical without CSS.",
+            "Informative images need concise alt text; decorative images use empty alt. A card's primary destination should be a descriptive link.",
+          ],
+          bullets: [
+            "Start with reading order.",
+            "Use one clear heading for the card.",
+            "Avoid duplicating the same destination with several unlabeled controls.",
+          ],
+          syntax:
+            '<article>\n  <h2>Python Core</h2>\n  <p>…</p>\n  <a href="/python">Open expedition</a>\n</article>',
+          example: {
+            title: "Standalone track card",
+            description: "The component communicates its purpose before styling.",
+            code: '<article>\n  <img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\'/%3E" alt="">\n  <h2>Python Core</h2>\n  <p>Restore programming foundations.</p>\n  <a href="#python">Open Python expedition</a>\n</article>',
+          },
+          fieldNote:
+            "Test a component with CSS disabled and by keyboard before polishing its visual surface.",
+          mistakes: [
+            "Using a background image for meaningful content.",
+            "Putting a button inside a link.",
+            "Repeating vague text such as Learn more across every card.",
+          ],
+          tasks: [
+            webTask(
+              "html-accessible-card-article",
+              "Restore card semantics",
+              "Change the wrapper to article and add an h2 titled JavaScript Relay.",
+              "The card is a headed article.",
+              '<div class="card">\n  <div>JavaScript Relay</div>\n  <p>Functions and events.</p>\n</div>',
+              "<article\\s+[^>]*class=[\"']card[\"'][\\s\\S]*<h2>\\s*JavaScript Relay\\s*</h2>[\\s\\S]*</article>",
+              ["Update both wrapper tags and replace the title div."],
+            ),
+            webTask(
+              "html-accessible-card-link",
+              "Add a descriptive action",
+              "Link Open JavaScript expedition to #javascript.",
+              "The card has a descriptive native link.",
+              "<article>\n  <h2>JavaScript Relay</h2>\n  <p>Functions and events.</p>\n  <!-- Add action -->\n</article>",
+              "<a\\s+[^>]*href=[\"']#javascript[\"'][^>]*>\\s*Open JavaScript expedition\\s*</a>",
+              ["Use an anchor because the action navigates."],
+            ),
+          ],
+          bonusTask: webBonus(
+            "html-accessible-card-bonus",
+            "Complete expedition card",
+            "Build an article with a decorative image, h2, descriptive paragraph, progress element labeled in text, and link.",
+            "The preview shows a complete track card with native progress.",
+            '<article class="track-card">\n  <!-- Assemble the accessible component -->\n</article>',
+            "<img\\s+[^>]*alt=[\"'][\"'][^>]*>[\\s\\S]*<h2[\\s>][\\s\\S]*<p[\\s>][\\s\\S]*<progress\\s+[^>]*value=[\"']\\d+[\"'][^>]*max=[\"']100[\"'][\\s\\S]*<a\\s+[^>]*href=",
+            [
+              "An empty alt marks a decorative image.",
+              "Add visible text that explains the progress value.",
+            ],
+            "A complete component rises intact from the Semantic Strata.",
+          ),
+          durationMinutes: 34,
+        },
+      ],
+    },
+    {
+      id: "responsive-field",
+      title: "Responsive Field",
+      subtitle: "Turn semantic structures into adaptive visual systems",
+      description:
+        "Selectors, spacing, Flexbox, Grid, and media queries create interfaces that adapt without losing meaning.",
+      landmark: "The Layout Prism",
+      accent: "cyan",
+      lessons: [
+        {
+          id: "css-selectors",
+          title: "Cascade Signals",
+          subtitle: "Target elements and reason about the cascade",
+          objectives: [
+            "Write element and class selectors",
+            "Understand source order and specificity",
+            "Use custom properties for shared tokens",
+          ],
+          conceptHeading: "The cascade resolves which declared value reaches an element",
+          explanation: [
+            "Selectors match elements; declarations assign property values. When rules compete, origin, importance, specificity, and source order determine the result.",
+            "Classes are reusable styling hooks. CSS custom properties store shared values such as colors and spacing while still participating in the cascade.",
+          ],
+          bullets: [
+            "Prefer low-specificity class selectors.",
+            "Avoid !important in normal component code.",
+            "Define shared tokens on :root.",
+          ],
+          syntax: ":root { --signal: #b8ff36; }\n.card { color: var(--signal); }",
+          example: {
+            title: "Token-driven signal card",
+            description: "One custom property feeds a reusable class.",
+            code: '<style>\n:root { --signal: #b8ff36; }\n.signal-card { color: var(--signal); border: 1px solid currentColor; }\n</style>\n<article class="signal-card">Signal online</article>',
+          },
+          fieldNote:
+            "Inspect the browser's computed styles to see which rule won and why.",
+          mistakes: [
+            "Using an id selector for every visual style.",
+            "Increasing specificity repeatedly instead of fixing rule organization.",
+            "Defining a custom property outside the scope where it is used.",
+          ],
+          tasks: [
+            webTask(
+              "css-selectors-class",
+              "Style a reusable class",
+              "Add a .relic rule that sets color to #b8ff36 and a 1px solid border.",
+              "Both relic articles share the class style.",
+              '<style>\n/* Add reusable relic rule */\n</style>\n<article class="relic">Prism</article>\n<article class="relic">Coil</article>',
+              "\\.relic\\s*\\{[^}]*color\\s*:\\s*#b8ff36\\s*;[^}]*border\\s*:\\s*1px\\s+solid",
+              ["Write the class selector once inside style."],
+            ),
+            webTask(
+              "css-selectors-token",
+              "Create a signal token",
+              "Define --signal on :root and use var(--signal) as the button background.",
+              "The button uses a shared custom property.",
+              '<style>\n:root {\n  /* Define token */\n}\n.action {\n  /* Use token */\n}\n</style>\n<button class="action">Restore</button>',
+              ":root\\s*\\{[^}]*--signal\\s*:[^;]+;[^}]*\\}[\\s\\S]*\\.action\\s*\\{[^}]*background(?:-color)?\\s*:\\s*var\\(--signal\\)",
+              ["Custom property names begin with two hyphens."],
+            ),
+          ],
+          bonusTask: webBonus(
+            "css-selectors-bonus",
+            "Tokenized theme",
+            "Define surface, text, and accent tokens, then use all three in .panel.",
+            "The panel is fully driven by three shared tokens.",
+            '<style>\n:root {\n  /* Three theme tokens */\n}\n.panel {\n  /* background, color, border-color */\n}\n</style>\n<section class="panel"><h2>Archive panel</h2></section>',
+            "--surface\\s*:[^;]+;[\\s\\S]*--text\\s*:[^;]+;[\\s\\S]*--accent\\s*:[^;]+;[\\s\\S]*background(?:-color)?\\s*:\\s*var\\(--surface\\)[\\s\\S]*color\\s*:\\s*var\\(--text\\)[\\s\\S]*border(?:-color)?[^:]*:\\s*(?:1px\\s+solid\\s+)?var\\(--accent\\)",
+            ["Use var(...) in every panel declaration."],
+            "The cascade resolves into a coherent theme layer.",
+          ),
+        },
+        {
+          id: "css-box-model",
+          title: "Spatial Layers",
+          subtitle: "Control content, padding, borders, and margins",
+          objectives: [
+            "Identify box-model layers",
+            "Use border-box sizing",
+            "Create consistent spacing",
+          ],
+          conceptHeading: "Every rendered element occupies a layered rectangular box",
+          explanation: [
+            "Content sits inside padding, then border, with margin outside. Under content-box, declared width excludes padding and border; border-box includes them.",
+            "A global border-box rule makes component sizing more predictable. Use padding for internal breathing room and gap or margin for relationships between elements.",
+          ],
+          bullets: [
+            "Apply box-sizing: border-box broadly.",
+            "Use padding inside a component.",
+            "Avoid fixed heights for growing text.",
+          ],
+          syntax: "*, *::before, *::after { box-sizing: border-box; }",
+          example: {
+            title: "Predictable instrument panel",
+            description: "The declared width includes padding and border.",
+            code: '<style>\n* { box-sizing: border-box; }\n.panel { width: 280px; padding: 24px; border: 1px solid #6f7f83; }\n</style>\n<section class="panel">Field instrument</section>',
+          },
+          fieldNote:
+            "Use the layout inspector to visualize each box-model layer rather than adjusting values blindly.",
+          mistakes: [
+            "Adding padding to a fixed content-box width and causing overflow.",
+            "Using margin to create internal space.",
+            "Fixing text containers to one rigid height.",
+          ],
+          tasks: [
+            webTask(
+              "css-box-model-border-box",
+              "Normalize sizing",
+              "Apply border-box to all elements and their pseudo-elements.",
+              "The universal sizing rule includes ::before and ::after.",
+              '<style>\n/* Add sizing reset */\n.card { width: 300px; padding: 24px; border: 2px solid; }\n</style>\n<article class="card">Archive card</article>',
+              "\\*,\\s*\\*::before,\\s*\\*::after\\s*\\{[^}]*box-sizing\\s*:\\s*border-box",
+              ["Use a comma-separated selector list."],
+            ),
+            webTask(
+              "css-box-model-spacing",
+              "Create internal and external space",
+              "Give .card 24px padding and 16px margin-block.",
+              "The card has distinct inner and outer spacing.",
+              '<style>\n.card {\n  border: 1px solid #657276;\n  /* Add spacing */\n}\n</style>\n<article class="card">Relic</article>',
+              "\\.card\\s*\\{[^}]*padding\\s*:\\s*24px\\s*;[^}]*margin-block\\s*:\\s*16px",
+              ["Both declarations belong in the existing rule."],
+            ),
+          ],
+          bonusTask: webBonus(
+            "css-box-model-bonus",
+            "Responsive measurement card",
+            "Create a card with max-width 32rem, inline-size 100%, border-box, padding, border, and centered auto inline margins.",
+            "The card fills narrow space but stops growing at 32rem.",
+            '<style>\n.measurement-card {\n  /* Build responsive box */\n}\n</style>\n<article class="measurement-card"><h2>Measurement</h2></article>',
+            "box-sizing\\s*:\\s*border-box[\\s\\S]*inline-size\\s*:\\s*100%[\\s\\S]*max-width\\s*:\\s*32rem[\\s\\S]*padding\\s*:[^;]+[\\s\\S]*border\\s*:[^;]+[\\s\\S]*margin-inline\\s*:\\s*auto",
+            ["Use logical properties for inline sizing and margins."],
+            "The Spatial Layers align without overflow.",
+          ),
+        },
+        {
+          id: "css-flexbox",
+          title: "Alignment Rails",
+          subtitle: "Arrange items along one primary axis",
+          objectives: [
+            "Create a flex container",
+            "Align and distribute items",
+            "Wrap items when space narrows",
+          ],
+          conceptHeading: "Flexbox distributes items along a main and cross axis",
+          explanation: [
+            "display:flex turns direct children into flex items. justify-content controls the main axis and align-items controls the cross axis.",
+            "gap creates consistent spacing without special first or last-child rules. flex-wrap lets items move onto additional lines instead of shrinking beyond usefulness.",
+          ],
+          bullets: [
+            "Choose row or column deliberately.",
+            "Use gap for sibling spacing.",
+            "Test both narrow and wide containers.",
+          ],
+          syntax: ".toolbar { display: flex; align-items: center; gap: 1rem; }",
+          example: {
+            title: "Adaptive toolbar",
+            description: "Actions align and wrap as space changes.",
+            code: '<style>\n.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }\n</style>\n<div class="toolbar"><strong>NEXUS</strong><button>Restore</button></div>',
+          },
+          fieldNote:
+            "Flexbox is one-dimensional: use Grid when rows and columns must coordinate together.",
+          mistakes: [
+            "Applying flex properties to grandchildren instead of direct items.",
+            "Using space-between when a consistent gap is intended.",
+            "Forcing items into one line on small screens.",
+          ],
+          tasks: [
+            webTask(
+              "css-flexbox-toolbar",
+              "Align a toolbar",
+              "Make .toolbar flex, center items vertically, put space between groups, and add a 12px gap.",
+              "The brand and action align on one adaptive rail.",
+              '<style>\n.toolbar {\n  /* Add flex layout */\n}\n</style>\n<header class="toolbar"><strong>NEXUS</strong><button>Profile</button></header>',
+              "\\.toolbar\\s*\\{[^}]*display\\s*:\\s*flex[^}]*align-items\\s*:\\s*center[^}]*justify-content\\s*:\\s*space-between[^}]*gap\\s*:\\s*12px",
+              ["All four declarations belong to the container."],
+            ),
+            webTask(
+              "css-flexbox-wrap",
+              "Build a wrapping chip rail",
+              "Make .chips a wrapping flex container with an 8px gap.",
+              "Chips move to a new row when required.",
+              '<style>\n.chips { /* Add layout */ }\n.chips span { border: 1px solid; padding: 4px 8px; }\n</style>\n<div class="chips"><span>Python</span><span>JavaScript</span><span>HTML/CSS</span><span>Java</span></div>',
+              "\\.chips\\s*\\{[^}]*display\\s*:\\s*flex[^}]*flex-wrap\\s*:\\s*wrap[^}]*gap\\s*:\\s*8px",
+              ["flex-wrap: wrap enables additional lines."],
+            ),
+          ],
+          bonusTask: webBonus(
+            "css-flexbox-bonus",
+            "Responsive split hero",
+            "Create .hero as a wrapping flex row; give both direct children flex: 1 1 18rem and a 2rem gap.",
+            "Copy and instrument share space and stack naturally when narrow.",
+            '<style>\n.hero { /* Container */ }\n.hero > * { /* Flexible children */ }\n</style>\n<section class="hero"><div><h1>Recover logic</h1></div><div>NX instrument</div></section>',
+            "\\.hero\\s*\\{[^}]*display\\s*:\\s*flex[^}]*flex-wrap\\s*:\\s*wrap[^}]*gap\\s*:\\s*2rem[^}]*\\}[\\s\\S]*\\.hero\\s*>\\s*\\*\\s*\\{[^}]*flex\\s*:\\s*1\\s+1\\s+18rem",
+            ["The child rule lets each column grow, shrink, and wrap."],
+            "The Alignment Rails adapt without a breakpoint.",
+          ),
+        },
+        {
+          id: "css-grid",
+          title: "Coordinate Matrix",
+          subtitle: "Build two-dimensional responsive layouts",
+          objectives: [
+            "Create explicit grid columns",
+            "Use minmax and auto-fit",
+            "Place items across grid tracks",
+          ],
+          conceptHeading: "Grid coordinates rows and columns as one layout system",
+          explanation: [
+            "CSS Grid defines tracks for rows and columns. fr units distribute available space, while minmax sets useful lower and upper bounds.",
+            "repeat(auto-fit, minmax(...)) creates responsive card grids that add or remove columns according to available width.",
+          ],
+          bullets: [
+            "Use Grid for coordinated rows and columns.",
+            "Use gap instead of per-card margins.",
+            "Let content influence minimum track size.",
+          ],
+          syntax: "grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));",
+          example: {
+            title: "Adaptive archive cards",
+            description: "The browser chooses how many useful columns fit.",
+            code: '<style>\n.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem; }\n.grid article { border: 1px solid; padding: 1rem; }\n</style>\n<div class="grid"><article>Python</article><article>JS</article><article>Web</article></div>',
+          },
+          fieldNote:
+            "Use the Grid inspector to see track lines and diagnose unexpected placement.",
+          mistakes: [
+            "Using rigid pixel columns that overflow narrow screens.",
+            "Applying grid-column to an element outside the grid.",
+            "Adding margins where container gap is clearer.",
+          ],
+          tasks: [
+            webTask(
+              "css-grid-columns",
+              "Create a three-column matrix",
+              "Make .matrix a grid with three equal columns and 1rem gap.",
+              "The three cells occupy equal tracks.",
+              '<style>\n.matrix { /* Add grid */ }\n</style>\n<div class="matrix"><div>A</div><div>B</div><div>C</div></div>',
+              "\\.matrix\\s*\\{[^}]*display\\s*:\\s*grid[^}]*grid-template-columns\\s*:\\s*repeat\\(3\\s*,\\s*1fr\\)[^}]*gap\\s*:\\s*1rem",
+              ["repeat(3, 1fr) defines three equal tracks."],
+            ),
+            webTask(
+              "css-grid-autofit",
+              "Build an adaptive card grid",
+              "Use auto-fit with minmax(14rem,1fr) and a 20px gap.",
+              "Cards reflow according to available width.",
+              '<style>\n.cards { /* Add adaptive grid */ }\n</style>\n<div class="cards"><article>One</article><article>Two</article><article>Three</article></div>',
+              "\\.cards\\s*\\{[^}]*display\\s*:\\s*grid[^}]*grid-template-columns\\s*:\\s*repeat\\(auto-fit\\s*,\\s*minmax\\(14rem\\s*,\\s*1fr\\)\\)[^}]*gap\\s*:\\s*20px",
+              ["Keep both nested functions exactly balanced."],
+            ),
+          ],
+          bonusTask: webBonus(
+            "css-grid-bonus",
+            "Dashboard coordinate system",
+            "Create a grid with sidebar minmax(12rem,1fr), content 3fr, and make header span both columns.",
+            "The header spans the full matrix above two unequal columns.",
+            '<style>\n.dashboard { /* Grid tracks */ }\n.dashboard > header { /* Span */ }\n</style>\n<div class="dashboard"><header>NEXUS</header><aside>Map</aside><main>Lesson</main></div>',
+            "\\.dashboard\\s*\\{[^}]*display\\s*:\\s*grid[^}]*grid-template-columns\\s*:\\s*minmax\\(12rem\\s*,\\s*1fr\\)\\s+3fr[^}]*\\}[\\s\\S]*\\.dashboard\\s*>\\s*header\\s*\\{[^}]*grid-column\\s*:\\s*1\\s*/\\s*-1",
+            ["grid-column: 1 / -1 reaches from first to last line."],
+            "The Coordinate Matrix resolves a full application shell.",
+          ),
+        },
+        {
+          id: "css-responsive",
+          title: "Adaptive Horizon",
+          subtitle: "Combine fluid sizing, media queries, and reduced motion",
+          objectives: [
+            "Write a mobile-first media query",
+            "Use fluid sizing with clamp",
+            "Respect reduced-motion preferences",
+          ],
+          conceptHeading: "Responsive design adapts to capability and space",
+          explanation: [
+            "Start with a useful narrow layout, then add enhancements when more space becomes available. Media queries should respond to layout needs instead of named device models.",
+            "Fluid functions such as clamp scale within safe bounds. Preference queries let the interface honor reduced motion and other user settings.",
+          ],
+          bullets: [
+            "Choose breakpoints where content needs them.",
+            "Avoid hiding essential content on small screens.",
+            "Disable non-essential motion under prefers-reduced-motion.",
+          ],
+          syntax:
+            "@media (min-width: 48rem) { … }\n@media (prefers-reduced-motion: reduce) { … }",
+          example: {
+            title: "Mobile-first field panel",
+            description: "One column becomes two only when space permits.",
+            code: '<style>\n.layout { display: grid; gap: 1rem; }\nh1 { font-size: clamp(2rem, 5vw, 4rem); }\n@media (min-width: 48rem) { .layout { grid-template-columns: 1fr 2fr; } }\n</style>\n<div class="layout"><nav>Map</nav><main><h1>Archive</h1></main></div>',
+          },
+          fieldNote:
+            "Resize slowly and watch where content becomes cramped; that is evidence for a breakpoint.",
+          mistakes: [
+            "Designing only for one phone and one desktop width.",
+            "Using fixed font sizes that become extreme.",
+            "Leaving decorative animation active for reduced-motion users.",
+          ],
+          tasks: [
+            webTask(
+              "css-responsive-media",
+              "Add a content-driven breakpoint",
+              "At 48rem and wider, change .layout from one column to 1fr 2fr.",
+              "The base stays single-column and the wider layout has two tracks.",
+              '<style>\n.layout { display: grid; gap: 1rem; }\n/* Add min-width query */\n</style>\n<div class="layout"><aside>Map</aside><main>Lesson</main></div>',
+              "@media\\s*\\(min-width\\s*:\\s*48rem\\)\\s*\\{[\\s\\S]*\\.layout\\s*\\{[^}]*grid-template-columns\\s*:\\s*1fr\\s+2fr",
+              ["Place the overriding .layout rule inside @media."],
+            ),
+            webTask(
+              "css-responsive-clamp",
+              "Create fluid type",
+              "Set h1 font-size to clamp(2rem,6vw,4.5rem).",
+              "The heading scales without leaving its safe range.",
+              "<style>\nh1 { /* Add fluid font size */ }\n</style>\n<h1>Living Code Archive</h1>",
+              "h1\\s*\\{[^}]*font-size\\s*:\\s*clamp\\(2rem\\s*,\\s*6vw\\s*,\\s*4\\.5rem\\)",
+              ["clamp takes minimum, preferred, and maximum."],
+            ),
+          ],
+          bonusTask: webBonus(
+            "css-responsive-bonus",
+            "Accessible responsive expedition",
+            "Create a mobile-first card grid, fluid h1, a 50rem enhancement, and a reduced-motion rule that removes animation.",
+            "The page adapts spatially and honors motion preference.",
+            '<style>\n.cards { display: grid; gap: 1rem; }\nh1 { /* fluid type */ }\n/* wide layout */\n/* motion preference */\n</style>\n<h1>Expeditions</h1><div class="cards"><article>Python</article><article>Web</article></div>',
+            "font-size\\s*:\\s*clamp\\([^)]+\\)[\\s\\S]*@media\\s*\\(min-width\\s*:\\s*50rem\\)[\\s\\S]*grid-template-columns[\\s\\S]*@media\\s*\\(prefers-reduced-motion\\s*:\\s*reduce\\)[\\s\\S]*animation\\s*:\\s*none",
+            ["Use separate media queries for width and user preference."],
+            "The Layout Prism projects an adaptive, accessible interface system.",
+          ),
+          durationMinutes: 38,
+        },
+      ],
+    },
+  ],
+  futureWorlds: ["CSS Architecture", "Web Components", "Performance Observatory"],
+});
+
+export const track = appendCurriculumWorld(baseTrack, htmlCssV4World);

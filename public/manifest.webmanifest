@@ -1,0 +1,18 @@
+{
+  "name": "NEXUS CODE — Living Code Archive",
+  "short_name": "NEXUS CODE",
+  "description": "A spatial programming field atlas with ninety guided lessons and interactive 3D models.",
+  "start_url": "./#/",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f2efe4",
+  "theme_color": "#10281f",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
