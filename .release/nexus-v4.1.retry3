@@ -1,0 +1,3 @@
+release=nexus-code-v4.1
+reason=eslint-vendor-ignore
+patch_sha256=b7cf284065af59406ecc38ece56aee9fe742f0223ab171b05ea71b9c57c58248
