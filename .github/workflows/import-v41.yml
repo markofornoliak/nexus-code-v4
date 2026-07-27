@@ -3,7 +3,7 @@ name: Import and verify NEXUS v4.1
 on:
   push:
     branches: ["main"]
-    paths: [".release/nexus-v4.1.patch"]
+    paths: [".release/nexus-v4.1.ready"]
 
 permissions:
   contents: write
@@ -28,10 +28,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Apply release patch
+      - name: Reconstruct and apply release patch
         run: |
-          git apply --binary --index .release/nexus-v4.1.patch
-          git rm .release/nexus-v4.1.patch
+          cat .release/nexus-v4.1.patch.gz.b64.part* \
+            | base64 --decode \
+            | gzip --decompress \
+            > /tmp/nexus-v4.1.patch
+          git apply --binary --index /tmp/nexus-v4.1.patch
+          git rm -r .release
+          git rm .github/workflows/import-v41.yml
 
       - name: Setup Node
         uses: actions/setup-node@v6
