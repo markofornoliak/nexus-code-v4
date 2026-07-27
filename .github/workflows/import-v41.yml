@@ -3,7 +3,7 @@ name: Import and verify NEXUS v4.1
 on:
   push:
     branches: ["main"]
-    paths: [".release/nexus-v4.1.ready"]
+    paths: [".release/nexus-v4.1.retry"]
 
 permissions:
   contents: write
@@ -28,13 +28,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Reconstruct and apply release patch
+      - name: Reconstruct and apply complete release patch
         run: |
-          cat .release/nexus-v4.1.patch.gz.b64.part* \
+          cat .release/nexus-v4.1-full.patch.gz.b64.part* \
             | base64 --decode \
             | gzip --decompress \
-            > /tmp/nexus-v4.1.patch
-          git apply --binary --index /tmp/nexus-v4.1.patch
+            > /tmp/nexus-v4.1-full.patch
+          echo "b7cf284065af59406ecc38ece56aee9fe742f0223ab171b05ea71b9c57c58248  /tmp/nexus-v4.1-full.patch" | sha256sum --check
+          git apply --binary --index /tmp/nexus-v4.1-full.patch
           git rm -r .release
           git rm .github/workflows/import-v41.yml
 
