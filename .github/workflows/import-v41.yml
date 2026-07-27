@@ -3,7 +3,7 @@ name: Import and verify NEXUS v4.1
 on:
   push:
     branches: ["main"]
-    paths: [".release/nexus-v4.1.retry3"]
+    paths: [".release/nexus-v4.1.retry4"]
 
 permissions:
   contents: write
@@ -37,7 +37,9 @@ jobs:
           echo "b7cf284065af59406ecc38ece56aee9fe742f0223ab171b05ea71b9c57c58248  /tmp/nexus-v4.1-full.patch" | sha256sum --check
           git apply --binary --index /tmp/nexus-v4.1-full.patch
           sed -i 's/".sites-runtime"\]/".sites-runtime", "vendor"\]/' eslint.config.mjs
-          git add eslint.config.mjs
+          sed -i '0,/title: "Lazy Signal Streams"/s//title: "Generator Pipelines"/' src/content/v41/pythonAutomationWorld.ts
+          sed -i '0,/id: "python-decorators"/s//id: "python-decorator-protocols"/' src/content/v41/pythonAutomationWorld.ts
+          git add eslint.config.mjs src/content/v41/pythonAutomationWorld.ts
           git rm -r .release
           git rm .github/workflows/import-v41.yml
 
