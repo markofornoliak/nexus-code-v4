@@ -3,6 +3,7 @@ import { defaultProgress } from "../../services/storage/schema";
 import {
   isLessonUnlocked,
   selectActivityDays,
+  selectCommandCenterSnapshot,
   selectContinueLesson,
   selectRecoveryQueue,
   selectTrackProgress,
@@ -48,6 +49,22 @@ describe("progress selectors", () => {
     expect(queue).toHaveLength(4);
     expect(queue[0]?.lesson.id).toBe(first.id);
     expect(new Set(queue.map((selection) => selection.track.id)).size).toBe(4);
+  });
+
+  it("builds an adaptive command-center snapshot from existing progress", () => {
+    const snapshot = selectCommandCenterSnapshot(
+      defaultProgress,
+      15,
+      new Date("2026-07-24T12:00:00"),
+    );
+    expect(snapshot.totalLessons).toBe(100);
+    expect(snapshot.completedLessons).toBe(0);
+    expect(snapshot.skillSignals).toHaveLength(5);
+    expect(snapshot.recommendations[0]).toMatchObject({
+      trackLabel: "Python",
+      priority: "explore",
+      minutes: 15,
+    });
   });
 
   it("calculates weekly completion and bounded activity intensity", () => {

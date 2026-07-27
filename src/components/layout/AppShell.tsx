@@ -28,6 +28,7 @@ export function AppShell({ children }: PropsWithChildren) {
     { to: "/", label: "Archive" },
     { to: "/tracks", label: "Expeditions" },
     { to: "/atlas", label: "Atlas" },
+    { to: "/command", label: "Command" },
     { to: "/lab", label: "3D Lab" },
     { to: "/profile", label: "Relic vault" },
   ];
@@ -196,7 +197,7 @@ export function AppShell({ children }: PropsWithChildren) {
       {children}
       <footer className="site-footer">
         <Logo compact />
-        <p>NEXUS v4 / Living Code Archive / Spatial learning system</p>
+        <p>NEXUS v4.1 / Living Code Archive / Adaptive spatial learning system</p>
         <p>Built for keyboard, touch, and curious minds.</p>
       </footer>
     </div>

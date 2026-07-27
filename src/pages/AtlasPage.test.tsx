@@ -18,13 +18,13 @@ describe("learning atlas", () => {
   it("searches the complete cross-language catalog", async () => {
     const user = userEvent.setup();
     renderAtlas();
-    expect(screen.getByText("90 coordinates match")).toBeInTheDocument();
+    expect(screen.getByText("100 coordinates match")).toBeInTheDocument();
     await user.type(
       screen.getByRole("searchbox", { name: "Search lessons" }),
-      "generator",
+      "lazy signal streams",
     );
     expect(screen.getByRole("heading", { name: "Lazy Signal Streams" })).toBeVisible();
-    expect(screen.getByText("2 coordinates match")).toBeInTheDocument();
+    expect(screen.getByText("1 coordinate matches")).toBeInTheDocument();
   });
 
   it("creates a persistent lesson bookmark from a result card", async () => {

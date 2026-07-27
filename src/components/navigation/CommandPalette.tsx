@@ -2,6 +2,7 @@ import {
   ArrowRight,
   BookOpen,
   Boxes,
+  BrainCircuit,
   Compass,
   Library,
   Search,
@@ -43,6 +44,13 @@ const routes: CommandItem[] = [
     meta: "Search every fragment",
     to: "/atlas",
     icon: Search,
+  },
+  {
+    id: "command",
+    label: "Command Center",
+    meta: "Adaptive learning intelligence",
+    to: "/command",
+    icon: BrainCircuit,
   },
   {
     id: "profile",

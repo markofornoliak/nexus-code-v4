@@ -1,6 +1,8 @@
 import {
   ArrowRight,
+  BrainCircuit,
   Braces,
+  Clock3,
   FlaskConical,
   Layers3,
   RadioTower,
@@ -13,6 +15,7 @@ import { achievements } from "../content/achievements";
 import { tracks } from "../content/registry";
 import { useProgress } from "../features/progress/ProgressContext";
 import {
+  selectCommandCenterSnapshot,
   selectContinueLesson,
   selectTrackProgress,
 } from "../features/progress/progressSelectors";
@@ -46,6 +49,10 @@ export default function LandingPage() {
     ? `/learn/${continueSelection.track.id}/${continueSelection.lesson.id}`
     : "/tracks/python";
   const pythonProgress = selectTrackProgress(python, state.progress);
+  const commandSnapshot = selectCommandCenterSnapshot(
+    state.progress,
+    state.preferences.focusSessionMinutes,
+  );
 
   return (
     <main id="main-content">
@@ -114,6 +121,46 @@ export default function LandingPage() {
 
       <MissionDeck />
 
+      <section
+        className="command-preview section-shell"
+        aria-labelledby="command-preview-title"
+      >
+        <div className="command-preview-copy">
+          <BrainCircuit aria-hidden="true" />
+          <span className="eyebrow">Adaptive operator intelligence</span>
+          <h2 id="command-preview-title">Your next signal is already ranked.</h2>
+          <p>
+            The Command Center reads open fragments, track momentum, continuity, and your
+            {` ${state.preferences.focusSessionMinutes}`}-minute focus protocol to build a
+            precise recovery queue.
+          </p>
+          <Link className="button button-primary" to="/command">
+            Open Command Center <ArrowRight aria-hidden="true" />
+          </Link>
+        </div>
+        <div className="command-preview-queue">
+          <header>
+            <span>Recovery score</span>
+            <strong>{commandSnapshot.recoveryScore}/100</strong>
+          </header>
+          {commandSnapshot.recommendations.slice(0, 3).map((recommendation, index) => (
+            <Link key={recommendation.id} to={recommendation.route}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div>
+                <small>
+                  {recommendation.trackLabel} / {recommendation.worldLabel}
+                </small>
+                <strong>{recommendation.title}</strong>
+              </div>
+              <em>
+                <Clock3 aria-hidden="true" /> {recommendation.minutes} min
+              </em>
+              <ArrowRight aria-hidden="true" />
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <section className="manifesto-band">
         <div className="section-shell manifesto-grid">
           <div>
@@ -157,8 +204,8 @@ export default function LandingPage() {
             {
               icon: Layers3,
               label: "Extensible archive",
-              title: "Ninety typed lessons",
-              text: "Eighteen worlds across five language expeditions share one content-first architecture and a searchable learning atlas.",
+              title: "One hundred typed lessons",
+              text: "Twenty worlds across five language expeditions share one content-first architecture, an adaptive command center, and a searchable learning atlas.",
             },
             {
               icon: ShieldCheck,
@@ -183,7 +230,7 @@ export default function LandingPage() {
           <span className="section-number">02 / EXPEDITION</span>
           <div>
             <p className="eyebrow">Python Core / Active</p>
-            <h2>Eight sectors. One complete path from syntax to graph systems.</h2>
+            <h2>Nine sectors. One complete path from syntax to automation systems.</h2>
           </div>
         </header>
         <div className="journey-line">

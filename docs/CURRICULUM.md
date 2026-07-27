@@ -1,17 +1,17 @@
-# NEXUS CODE v4 curriculum inventory
+# NEXUS CODE v4.1 curriculum inventory
 
-Release 4.0 contains **90 lessons**, **180 required tasks**, and **90 optional bonus
+Release 4.1 contains **100 lessons**, **200 required tasks**, and **100 optional bonus
 challenges**. Every released world contains five lessons, and lessons unlock in track
 order across world boundaries.
 
 | Track       | Runtime                   | Worlds | Lessons |
 | ----------- | ------------------------- | -----: | ------: |
-| Python Core | Pyodide Web Worker        |      8 |      40 |
-| JavaScript  | JavaScript Web Worker     |      3 |      15 |
+| Python Core | Pyodide Web Worker        |      9 |      45 |
+| JavaScript  | JavaScript Web Worker     |      4 |      20 |
 | HTML / CSS  | Sandboxed live preview    |      3 |      15 |
 | Java        | Java source analyzer      |      2 |      10 |
 | C++         | C++ source analyzer       |      2 |      10 |
-| **Total**   | Four execution strategies | **18** |  **90** |
+| **Total**   | Four execution strategies | **20** | **100** |
 
 ## Python Core
 
@@ -23,12 +23,14 @@ order across world boundaries.
 6. **Algorithm Observatory** — complexity, search, sort, and recursion.
 7. **Systems Laboratory** — assertions, debugging, files, generators, and contexts.
 8. **Graph Nexus** — graph models, BFS, DFS, dynamic programming, and shortest paths.
+9. **Automation Forge** — generators, decorators, resource gates, executable contracts, and an audited automation capstone.
 
 ## JavaScript
 
 1. **Signal Circuit** — output, bindings, arrays, decisions, and loops.
 2. **Reactive Lattice** — functions, objects, array methods, JSON, and promises.
 3. **State Reactor** — Map/Set, classes, closures, generators, and Promise coordination.
+4. **Runtime Orchestration** — event channels, reducers, concurrency, memoization, and an observable runtime capstone.
 
 The Worker provides lesson-level `input()`, captured console output, and top-level
 `await`.
@@ -71,4 +73,5 @@ sanitizers is still required for executable verification.
 - Bonus tasks never block lesson completion.
 - All previous IDs remain unchanged; v4 only appends worlds, lessons, tasks, and
   achievements.
-- Storage v5 migrates v1–v4 progress without rewriting completion records or drafts.
+- Storage v6 migrates v1–v5 progress without rewriting completion records, drafts, bookmarks, XP, achievements, or streaks.
+- Focus-session preference is additive and defaults to 25 minutes for existing users.

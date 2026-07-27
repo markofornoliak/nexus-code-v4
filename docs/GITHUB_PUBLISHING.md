@@ -1,7 +1,7 @@
 # GitHub publishing
 
-The project is configured for a public repository named `nexus-code-v4` and a default
-branch named `main`.
+The project is configured for the public repository `markofornoliak/nexus-code-v4` and
+a default branch named `main`.
 
 ## Automated first publish with GitHub CLI
 
@@ -9,13 +9,13 @@ From the project root:
 
 ```bash
 gh auth login
-gh repo create nexus-code-v4 --public --source=. --remote=origin --push
+gh repo create markofornoliak/nexus-code-v4 --public --source=. --remote=origin --push
 ```
 
 If the repository already exists:
 
 ```bash
-git remote add origin https://github.com/<owner>/nexus-code-v4.git
+git remote add origin https://github.com/markofornoliak/nexus-code-v4.git
 git push -u origin main
 ```
 
@@ -23,7 +23,7 @@ If `origin` exists but points elsewhere, inspect it before changing anything:
 
 ```bash
 git remote -v
-git remote set-url origin https://github.com/<owner>/nexus-code-v4.git
+git remote set-url origin https://github.com/markofornoliak/nexus-code-v4.git
 git push -u origin main
 ```
 

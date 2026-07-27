@@ -23,7 +23,7 @@ describe("versioned local storage", () => {
 
   it("validates progress imports and rejects executable-shaped junk", () => {
     const serialized = exportStoredState(defaultStoredState);
-    expect(importStoredState(serialized)?.version).toBe(5);
+    expect(importStoredState(serialized)?.version).toBe(6);
     expect(importStoredState('{"version":2,"progress":"alert(1)"}')).toBeNull();
   });
 
@@ -34,7 +34,7 @@ describe("versioned local storage", () => {
       preferences: defaultStoredState.preferences,
     };
     const migrated = importStoredState(JSON.stringify(previous));
-    expect(migrated?.version).toBe(5);
+    expect(migrated?.version).toBe(6);
     expect(migrated?.progress.totalXp).toBe(725);
     expect(migrated?.drafts).toEqual({});
     expect(migrated?.bookmarkedLessonIds).toEqual([]);
@@ -59,12 +59,13 @@ describe("versioned local storage", () => {
       },
     };
     const migrated = importStoredState(JSON.stringify(previous));
-    expect(migrated?.version).toBe(5);
+    expect(migrated?.version).toBe(6);
     expect(migrated?.progress.totalXp).toBe(940);
     expect(migrated?.drafts["task-one"]?.code).toBe("print('preserved')");
     expect(migrated?.preferences.reducedMotion).toBe(true);
     expect(migrated?.preferences.weeklyLessonGoal).toBe(3);
     expect(migrated?.preferences.visualMode).toBe("adaptive");
+    expect(migrated?.preferences.focusSessionMinutes).toBe(25);
     expect(migrated?.bookmarkedLessonIds).toEqual([]);
   });
 
@@ -79,7 +80,7 @@ describe("versioned local storage", () => {
       bookmarkedLessonIds: ["python-first-signal"],
     };
     const migrated = importStoredState(JSON.stringify(previous));
-    expect(migrated?.version).toBe(5);
+    expect(migrated?.version).toBe(6);
     expect(migrated?.preferences.visualMode).toBe("adaptive");
     expect(migrated?.bookmarkedLessonIds).toEqual(["python-first-signal"]);
   });
@@ -96,13 +97,14 @@ describe("versioned local storage", () => {
     );
   });
 
-  it("bounds and sanitizes v5 preferences and bookmark identifiers", () => {
+  it("bounds and sanitizes v6 preferences and bookmark identifiers", () => {
     const state = structuredClone(defaultStoredState);
     state.preferences.weeklyLessonGoal = 99;
     state.bookmarkedLessonIds = ["python-first-signal", "python-testing-assertions"];
     const imported = importStoredState(exportStoredState(state));
     expect(imported?.preferences.weeklyLessonGoal).toBe(14);
     expect(imported?.preferences.visualMode).toBe("adaptive");
+    expect(imported?.preferences.focusSessionMinutes).toBe(25);
     expect(imported?.bookmarkedLessonIds).toEqual([
       "python-first-signal",
       "python-testing-assertions",

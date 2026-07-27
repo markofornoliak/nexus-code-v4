@@ -1,6 +1,7 @@
 import type { Lesson, Track, World } from "../../types";
 import { appendCurriculumWorld } from "../_shared/defineLesson";
 import { pythonV4World } from "../v4/pythonWorld";
+import { pythonAutomationWorld } from "../v41/pythonAutomationWorld";
 import { world as logicChambers } from "./worlds/logic-chambers/world";
 import { world as memoryStructures } from "./worlds/memory-structures/world";
 import { world as signalAwakening } from "./worlds/signal-awakening/world";
@@ -33,7 +34,7 @@ const baseTrack: Track = {
   title: "Python Core",
   archiveName: "The Serpentine Archive",
   description:
-    "Restore a forty-lesson pathway from first output through data pipelines, object-oriented design, reliable systems, graph traversal, dynamic programming, and weighted pathfinding.",
+    "Restore a forty-five-lesson pathway from first output through data pipelines, object-oriented design, graph systems, testing, and production-style automation protocols.",
   difficulty: "beginner",
   status: "available",
   icon: "PY",
@@ -53,4 +54,7 @@ const baseTrack: Track = {
   ],
 };
 
-export const track = appendCurriculumWorld(baseTrack, pythonV4World);
+export const track = appendCurriculumWorld(
+  appendCurriculumWorld(baseTrack, pythonV4World),
+  pythonAutomationWorld,
+);

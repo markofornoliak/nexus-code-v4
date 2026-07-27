@@ -322,3 +322,156 @@ export function selectRecoveryQueue(
 
   return queue.slice(0, Math.max(1, Math.min(10, Math.floor(limit))));
 }
+
+export interface SkillSignal {
+  id: string;
+  label: string;
+  detail: string;
+  trackId: string;
+  accent: Track["accent"];
+  completed: number;
+  total: number;
+  percent: number;
+}
+
+export interface AdaptiveRecommendation {
+  id: string;
+  title: string;
+  description: string;
+  route: string;
+  trackLabel: string;
+  worldLabel: string;
+  minutes: number;
+  priority: "resume" | "momentum" | "explore";
+  progressPercent: number;
+}
+
+export interface CommandCenterSnapshot {
+  overallPercent: number;
+  recoveryScore: number;
+  completedLessons: number;
+  totalLessons: number;
+  activeTracks: number;
+  skillSignals: SkillSignal[];
+  recommendations: AdaptiveRecommendation[];
+}
+
+/**
+ * Creates a compact, deterministic picture of archive mastery for the adaptive
+ * command center. It derives everything from the existing progress schema so
+ * users upgrading from earlier releases keep a fully compatible history.
+ */
+export function selectCommandCenterSnapshot(
+  progress: UserProgress,
+  focusMinutes = 25,
+  now = new Date(),
+): CommandCenterSnapshot {
+  const availableTracks = tracks.filter((track) => track.status === "available");
+  const skillSignals = availableTracks.map((track): SkillSignal => {
+    const trackProgress = selectTrackProgress(track, progress);
+    const nextWorld = track.worlds.find(
+      (world) => !selectWorldProgress(track, world.id, progress).isCompleted,
+    );
+    return {
+      id: `skill:${track.id}`,
+      label: track.language,
+      detail: nextWorld?.title ?? "Expedition restored",
+      trackId: track.id,
+      accent: track.accent,
+      completed: trackProgress.completedLessons,
+      total: trackProgress.totalLessons,
+      percent: trackProgress.percent,
+    };
+  });
+
+  const totalLessons = skillSignals.reduce((sum, signal) => sum + signal.total, 0);
+  const completedLessons = skillSignals.reduce(
+    (sum, signal) => sum + signal.completed,
+    0,
+  );
+  const overallPercent =
+    totalLessons === 0 ? 0 : Math.round((completedLessons / totalLessons) * 100);
+  const activeTracks = skillSignals.filter((signal) => signal.completed > 0).length;
+
+  const recentActiveDays = new Set(
+    progress.activity
+      .map((item) => new Date(item.occurredAt))
+      .filter((date) => !Number.isNaN(date.getTime()))
+      .filter((date) => {
+        const age = now.getTime() - date.getTime();
+        return age >= 0 && age <= 7 * 24 * 60 * 60 * 1000;
+      })
+      .map(localDateKey),
+  ).size;
+  const completionSignal = overallPercent * 0.6;
+  const streakSignal = Math.min(progress.streak.currentStreak, 7) * (20 / 7);
+  const consistencySignal = Math.min(recentActiveDays, 7) * (20 / 7);
+  const recoveryScore = Math.min(
+    100,
+    Math.round(completionSignal + streakSignal + consistencySignal),
+  );
+
+  const recommendations = selectRecoveryQueue(progress, 5).map(
+    ({ track, lesson }, index): AdaptiveRecommendation => {
+      const lessonProgress = progress.lessons[lesson.id];
+      const completedStandardTasks = lessonProgress?.completedTaskIds.length ?? 0;
+      const progressPercent = Math.min(
+        100,
+        Math.round((completedStandardTasks / Math.max(lesson.tasks.length, 1)) * 100),
+      );
+      const trackProgress = selectTrackProgress(track, progress);
+      const world = track.worlds.find((candidate) => candidate.id === lesson.worldId);
+      const priority: AdaptiveRecommendation["priority"] = lessonProgress
+        ? "resume"
+        : trackProgress.completedLessons > 0
+          ? "momentum"
+          : "explore";
+      const description =
+        priority === "resume"
+          ? `Resume at ${progressPercent}% task recovery and close the open fragment.`
+          : priority === "momentum"
+            ? `Continue the ${track.language} sequence while prerequisite context is fresh.`
+            : `Open a new language signal with a guided foundation fragment.`;
+      return {
+        id: `recommendation:${track.id}:${lesson.id}`,
+        title: lesson.title,
+        description,
+        route: `/learn/${track.id}/${lesson.id}`,
+        trackLabel: track.language,
+        worldLabel: world?.title ?? track.archiveName,
+        minutes: Math.max(10, focusMinutes - index * 2),
+        priority,
+        progressPercent,
+      };
+    },
+  );
+
+  return {
+    overallPercent,
+    recoveryScore,
+    completedLessons,
+    totalLessons,
+    activeTracks,
+    skillSignals,
+    recommendations,
+  };
+}
+
+export function selectWorldSkillSignals(
+  track: Track,
+  progress: UserProgress,
+): SkillSignal[] {
+  return track.worlds.map((world) => {
+    const worldProgress = selectWorldProgress(track, world.id, progress);
+    return {
+      id: `world-skill:${track.id}:${world.id}`,
+      label: world.title,
+      detail: world.landmark,
+      trackId: track.id,
+      accent: track.accent,
+      completed: worldProgress.completedLessons,
+      total: worldProgress.totalLessons,
+      percent: worldProgress.percent,
+    };
+  });
+}

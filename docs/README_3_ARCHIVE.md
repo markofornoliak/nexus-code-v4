@@ -125,7 +125,7 @@ CodeMirror ──> runtime router ──> Python Worker / JavaScript Worker
 Progress UI <── selectors <── versioned reducer ──> localStorage + drafts
 ```
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for state ownership, content
+See [docs/ARCHITECTURE.md](ARCHITECTURE.md) for state ownership, content
 discovery, progress transactions, execution isolation, and base-path behavior.
 
 ## Folder structure
@@ -239,14 +239,14 @@ npm run test
 
 The unit suite does **not** download Pyodide. The execution hook and editor are mocked
 where runtime loading state is tested. Manual Pyodide, responsiveness, keyboard, and
-deployment checks are documented in [docs/QA_CHECKLIST.md](docs/QA_CHECKLIST.md).
+deployment checks are documented in [docs/QA_CHECKLIST.md](QA_CHECKLIST.md).
 The release command results and production-path audit are recorded in
-[docs/VERIFICATION.md](docs/VERIFICATION.md).
+[docs/VERIFICATION.md](VERIFICATION.md).
 
 The complete learning inventory is documented in
-[docs/CURRICULUM.md](docs/CURRICULUM.md), and content extension rules are in
-[docs/CONTENT_AUTHORING.md](docs/CONTENT_AUTHORING.md).
-See [docs/RELEASE_NOTES_3.0.md](docs/RELEASE_NOTES_3.0.md) for the complete release
+[docs/CURRICULUM.md](CURRICULUM.md), and content extension rules are in
+[docs/CONTENT_AUTHORING.md](CONTENT_AUTHORING.md).
+See [docs/RELEASE_NOTES_3.0.md](RELEASE_NOTES_3.0.md) for the complete release
 delta and compatibility notes.
 
 ## GitHub Pages deployment
@@ -456,7 +456,7 @@ The project contains no API keys or application secrets. Learner output uses Rea
 nodes and `pre`, never `dangerouslySetInnerHTML`. Imported progress is length-limited,
 parsed as JSON, validated against a fixed data shape, and cannot register code or
 validation functions. Release checks include `npm audit --omit=dev`; the full browser
-threat model is documented in [docs/SECURITY.md](docs/SECURITY.md).
+threat model is documented in [docs/SECURITY.md](SECURITY.md).
 
 ## Future roadmap
 
@@ -483,5 +483,5 @@ threat model is documented in [docs/SECURITY.md](docs/SECURITY.md).
   open-source licenses.
 
 All NEXUS layout, product copy, CSS artwork, archive terminology, course structure, and
-application source in this repository are original. See [LICENSE](LICENSE) for project
+application source in this repository are original. See [LICENSE](../LICENSE) for project
 licensing.

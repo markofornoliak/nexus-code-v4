@@ -1,6 +1,7 @@
 import { appendCurriculumWorld, createCurriculumTrack } from "../_shared/defineLesson";
 import { outputBonus, outputTask } from "../_shared/taskBuilders";
 import { javascriptV4World } from "../v4/javascriptWorld";
+import { javascriptSystemsWorld } from "../v41/javascriptSystemsWorld";
 
 const jsTask = (
   id: string,
@@ -57,7 +58,7 @@ const baseTrack = createCurriculumTrack({
   title: "Reactive Signal",
   archiveName: "The Event Lattice",
   description:
-    "Learn modern JavaScript from values and control flow through objects, transformations, JSON, and asynchronous signals.",
+    "Learn modern JavaScript from values and control flow through objects, asynchronous signals, reducers, event channels, caches, and observable runtime architecture.",
   icon: "JS",
   accent: "amber",
   execution: {
@@ -747,4 +748,7 @@ const baseTrack = createCurriculumTrack({
   futureWorlds: ["DOM Interface", "Web API Observatory", "Network Channels"],
 });
 
-export const track = appendCurriculumWorld(baseTrack, javascriptV4World);
+export const track = appendCurriculumWorld(
+  appendCurriculumWorld(baseTrack, javascriptV4World),
+  javascriptSystemsWorld,
+);

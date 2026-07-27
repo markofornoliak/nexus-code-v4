@@ -1,9 +1,9 @@
-# NEXUS CODE v4
+# NEXUS CODE v4.1
 
 > Recover the logic. Rebuild the signal.
 
 NEXUS CODE is a browser-native programming learning platform presented as a living,
-spatial code archive. Version 4 combines 90 typed lessons, executable Python and
+spatial code archive. Version 4.1 combines 100 typed lessons, executable Python and
 JavaScript challenges, accessible HTML previews, structural Java and C++ exercises,
 an interactive Three.js concept lab, and local-first learning progress.
 
@@ -15,15 +15,34 @@ CI, Pages deployment, and Dependabot configuration.
 
 | Track       | Execution mode             | Worlds | Lessons |
 | ----------- | -------------------------- | -----: | ------: |
-| Python Core | Pyodide Web Worker         |      8 |      40 |
-| JavaScript  | JavaScript Web Worker      |      3 |      15 |
+| Python Core | Pyodide Web Worker         |      9 |      45 |
+| JavaScript  | JavaScript Web Worker      |      4 |      20 |
 | HTML / CSS  | Sandboxed browser preview  |      3 |      15 |
 | Java        | Java source analyzer       |      2 |      10 |
 | C++         | C++ source analyzer        |      2 |      10 |
-| **Total**   | Four validation strategies | **18** |  **90** |
+| **Total**   | Four validation strategies | **20** | **100** |
 
-Every lesson has two required tasks and one optional bonus challenge: 180 required
-tasks and 90 bonus challenges in total.
+Every lesson has two required tasks and one optional bonus challenge: 200 required
+tasks and 100 bonus challenges in total.
+
+## What changed in v4.1
+
+- Added an adaptive **Command Center** with a recovery score, ranked next-best actions,
+  world-level diagnostics, a 14-day learning pulse, and persistent 15/25/45-minute focus
+  protocols.
+- Added a second interactive Three.js experience: a draggable, raycast-selectable skill
+  constellation with bounded pixel density, viewport pausing, cleanup, context-loss
+  recovery, and a complete semantic fallback.
+- Expanded the archive to 100 lessons and 20 worlds. Python gains the **Automation
+  Forge**; JavaScript gains **Runtime Orchestration**.
+- Added generators, decorators, context managers, test design, Python automation,
+  event buses, reducer state machines, concurrency, memoization, and observable runtime
+  capstones.
+- Added storage v6 with a non-destructive v1 → v6 migration and new 100-lesson,
+  automation, and runtime-orchestration relics.
+- Extended route, selector, migration, catalog, and curriculum tests for the new release.
+
+See [Release Notes 4.1](docs/RELEASE_NOTES_4.1.md) for the detailed change log.
 
 ## What changed in v4
 
@@ -102,6 +121,17 @@ the CodeMirror and Three.js chunks, and both execution Worker bundles.
 - Java and C++ use transparent source-structure checks. Native compiler execution is
   intentionally outside the client-only security model.
 
+### Adaptive command center
+
+The `/command` route turns existing progress into a focused operational plan:
+
+- ranked recommendations prioritize unfinished fragments, active-track momentum, and
+  deliberate exploration;
+- 15/25/45-minute focus protocols persist in storage v6;
+- the skill constellation visualizes all five language tracks through an interactive,
+  accessible Three.js scene;
+- world-level diagnostics and a 14-day learning pulse remain local and deterministic.
+
 ### Spatial learning
 
 The `/lab` route contains deterministic visual models for:
@@ -116,12 +146,12 @@ resource disposal are handled independently from the explanatory UI.
 
 ### Progress and continuity
 
-All progress is stored locally under `nexus-code:state`:
+All progress is stored locally under `nexus-code:state` (schema v6):
 
 - required and bonus task completion;
 - lesson completion and unlock order;
 - Signal Energy (XP), levels, achievements, streaks, and activity;
-- profile data, themes, weekly target, bookmarks, and visual-depth preference;
+- profile data, themes, weekly target, focus-session length, bookmarks, and visual-depth preference;
 - bounded per-task code and stdin drafts.
 
 The profile provides JSON export/import for backups or migration between browsers.
@@ -149,16 +179,19 @@ src/
 ├── components/              reusable learning, navigation, progress, and UI modules
 ├── content/
 │   ├── _shared/             typed content factories
-│   ├── v4/                  five new curriculum worlds
+│   ├── v4/                  v4 curriculum worlds
+│   ├── v41/                 automation and orchestration worlds
 │   └── {track}/             track modules and existing worlds
 ├── features/
 │   ├── code-runner/         CodeMirror, validation, runtimes, Workers, completion
-│   ├── progress/            reducer, selectors, achievements, daily missions
+│   ├── command-center/      adaptive 3D mastery constellation
+│   ├── progress/            reducer, selectors, achievements, adaptive routing
 │   └── visual-lab/          deterministic scene data and Three.js renderer
 ├── pages/                   landing, tracks, Atlas, 3D Lab, lesson, and profile routes
-├── services/storage/        schema validation and v1 → v5 migration
+├── services/storage/        schema validation and v1 → v6 migration
 ├── styles/                  both themes and adaptive spatial design system
-└── types/                   content, progress, and runtime contracts
+├── types/                   content, progress, and runtime contracts
+└── vendor/                  audited tiny install-resilience fallback
 ```
 
 Three.js and CodeMirror are isolated into explicit lazy production chunks. Pyodide is
@@ -170,8 +203,10 @@ More detail:
 - [Curriculum inventory](docs/CURRICULUM.md)
 - [Content authoring](docs/CONTENT_AUTHORING.md)
 - [Security model](docs/SECURITY.md)
+- [Dependency resilience](docs/DEPENDENCY_RESILIENCE.md)
 - [Manual QA checklist](docs/QA_CHECKLIST.md)
-- [Verification report](docs/VERIFICATION.md)
+- [Verification report v4.1](docs/VERIFICATION_4.1.md)
+- [Verification report v4.0](docs/VERIFICATION.md)
 
 ## GitHub Pages
 

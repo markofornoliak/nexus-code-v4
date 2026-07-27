@@ -51,6 +51,8 @@ export interface UserProgress {
   activity: LearningActivity[];
 }
 
+export type FocusSessionMinutes = 15 | 25 | 45;
+
 export interface UserPreferences {
   reducedMotion: boolean;
   editorFontSize: number;
@@ -58,6 +60,7 @@ export interface UserPreferences {
   theme: "field-codex" | "night-observatory";
   visualMode: "adaptive" | "minimal" | "immersive";
   weeklyLessonGoal: number;
+  focusSessionMinutes: FocusSessionMinutes;
 }
 
 export interface TaskDraft {

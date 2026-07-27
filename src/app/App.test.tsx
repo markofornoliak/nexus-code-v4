@@ -44,6 +44,25 @@ describe("application routes", () => {
     expect(screen.getByRole("searchbox", { name: "Search lessons" })).toBeInTheDocument();
   });
 
+  it("renders the adaptive Command Center route", async () => {
+    render(
+      <MemoryRouter initialEntries={["/command"]}>
+        <ProgressProvider>
+          <App />
+        </ProgressProvider>
+      </MemoryRouter>,
+    );
+    expect(
+      await screen.findByRole("heading", { name: /Command Center/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("radiogroup", { name: "Focus session length" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Skill constellation" }),
+    ).toBeInTheDocument();
+  });
+
   it("renders the accessible spatial learning lab without WebGL", async () => {
     render(
       <MemoryRouter initialEntries={["/lab"]}>

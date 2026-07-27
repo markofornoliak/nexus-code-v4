@@ -28,6 +28,10 @@ export type ProgressAction =
   | { type: "set-theme"; theme: UserPreferences["theme"] }
   | { type: "set-visual-mode"; visualMode: UserPreferences["visualMode"] }
   | { type: "set-weekly-lesson-goal"; goal: number }
+  | {
+      type: "set-focus-session-minutes";
+      minutes: UserPreferences["focusSessionMinutes"];
+    }
   | { type: "toggle-bookmark"; lessonId: string }
   | {
       type: "save-draft";
@@ -220,6 +224,14 @@ export function progressReducer(
         preferences: {
           ...state.preferences,
           weeklyLessonGoal: Math.max(1, Math.min(14, Math.round(action.goal))),
+        },
+      };
+    case "set-focus-session-minutes":
+      return {
+        ...state,
+        preferences: {
+          ...state.preferences,
+          focusSessionMinutes: action.minutes,
         },
       };
     case "toggle-bookmark": {

@@ -8,6 +8,7 @@ const LandingPage = lazy(() => import("../pages/LandingPage"));
 const TracksPage = lazy(() => import("../pages/TracksPage"));
 const AtlasPage = lazy(() => import("../pages/AtlasPage"));
 const LabPage = lazy(() => import("../pages/LabPage"));
+const CommandCenterPage = lazy(() => import("../pages/CommandCenterPage"));
 const TrackPage = lazy(() => import("../pages/TrackPage"));
 const LessonPage = lazy(() => import("../pages/LessonPage"));
 const ProfilePage = lazy(() => import("../pages/ProfilePage"));
@@ -23,6 +24,7 @@ export function App() {
             <Route path="/tracks" element={<TracksPage />} />
             <Route path="/atlas" element={<AtlasPage />} />
             <Route path="/lab" element={<LabPage />} />
+            <Route path="/command" element={<CommandCenterPage />} />
             <Route path="/tracks/:trackId" element={<TrackPage />} />
             <Route path="/learn/:trackId/:lessonId" element={<LessonPage />} />
             <Route path="/profile" element={<ProfilePage />} />

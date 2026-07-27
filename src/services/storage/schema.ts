@@ -8,7 +8,7 @@ import type {
 } from "../../types";
 import { sanitizeStreak } from "../../lib/date";
 
-export const STORAGE_VERSION = 5;
+export const STORAGE_VERSION = 6;
 export const STORAGE_KEY = "nexus-code:state";
 
 export const defaultProgress: UserProgress = {
@@ -33,6 +33,7 @@ export const defaultPreferences: UserPreferences = {
   theme: "field-codex",
   visualMode: "adaptive",
   weeklyLessonGoal: 3,
+  focusSessionMinutes: 25,
 };
 
 export const defaultStoredState: StoredApplicationState = {
@@ -154,6 +155,10 @@ function parsePreferences(value: unknown): UserPreferences {
         safeInteger(value.weeklyLessonGoal, defaultPreferences.weeklyLessonGoal),
       ),
     ),
+    focusSessionMinutes:
+      value.focusSessionMinutes === 15 || value.focusSessionMinutes === 45
+        ? value.focusSessionMinutes
+        : 25,
   };
 }
 
@@ -220,6 +225,19 @@ function migrate(raw: Record<string, unknown>): Record<string, unknown> {
       preferences: isRecord(migrated.preferences)
         ? {
             visualMode: defaultPreferences.visualMode,
+            ...migrated.preferences,
+          }
+        : defaultPreferences,
+    };
+    version = 5;
+  }
+  if (version === 5) {
+    migrated = {
+      ...migrated,
+      version: 6,
+      preferences: isRecord(migrated.preferences)
+        ? {
+            focusSessionMinutes: defaultPreferences.focusSessionMinutes,
             ...migrated.preferences,
           }
         : defaultPreferences,

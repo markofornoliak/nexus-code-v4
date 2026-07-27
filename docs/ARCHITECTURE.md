@@ -2,20 +2,20 @@
 
 ## State boundaries
 
-| State                                             | Owner                          | Persistence              |
-| ------------------------------------------------- | ------------------------------ | ------------------------ |
-| Track, world, lesson, task, achievement content   | `src/content` registry         | Build-time modules       |
-| User XP, task completion, relics, streak, profile | progress reducer               | Versioned `localStorage` |
-| Theme, visual depth, weekly target, bookmarks     | progress reducer               | Versioned `localStorage` |
-| Editor text and selected task                     | `LessonPage`                   | Current route            |
-| Per-task code and input drafts                    | progress reducer               | Versioned `localStorage` |
-| Python runtime and execution queue                | `PyodideService`               | Worker lifetime only     |
-| JavaScript runtime and execution queue            | `JavaScriptService`            | Worker lifetime only     |
-| HTML preview document                             | `LessonPage` sandbox           | Current route            |
-| Runtime output and validation result              | `useCodeRunner` / `LessonPage` | Deliberately ephemeral   |
-| 3D scene coordinates and state                    | pure visual-lab scene model    | Recomputed per view      |
-| WebGL renderer, geometry, and animation           | `NexusScene`                   | Component lifetime only  |
-| Navigation and route params                       | `src/router` context           | URL hash                 |
+| State                                                       | Owner                          | Persistence              |
+| ----------------------------------------------------------- | ------------------------------ | ------------------------ |
+| Track, world, lesson, task, achievement content             | `src/content` registry         | Build-time modules       |
+| User XP, task completion, relics, streak, profile           | progress reducer               | Versioned `localStorage` |
+| Theme, visual depth, weekly target, focus window, bookmarks | progress reducer               | Versioned `localStorage` |
+| Editor text and selected task                               | `LessonPage`                   | Current route            |
+| Per-task code and input drafts                              | progress reducer               | Versioned `localStorage` |
+| Python runtime and execution queue                          | `PyodideService`               | Worker lifetime only     |
+| JavaScript runtime and execution queue                      | `JavaScriptService`            | Worker lifetime only     |
+| HTML preview document                                       | `LessonPage` sandbox           | Current route            |
+| Runtime output and validation result                        | `useCodeRunner` / `LessonPage` | Deliberately ephemeral   |
+| 3D scene coordinates and state                              | pure visual-lab scene model    | Recomputed per view      |
+| WebGL renderer, geometry, and animation                     | `NexusScene`                   | Component lifetime only  |
+| Navigation and route params                                 | `src/router` context           | URL hash                 |
 
 ## Content discovery
 
@@ -25,7 +25,7 @@ language modules. The original Python worlds continue to discover files under
 factories. Both routes produce the same `Track → World → Lesson → Task` domain model,
 so renderers remain independent of curriculum size.
 
-`src/lib/catalogSearch.ts` flattens that registry into a deterministic 90-entry search
+`src/lib/catalogSearch.ts` flattens that registry into a deterministic 100-entry search
 index at build time. Atlas and command-palette results therefore share the same typed
 content source, preserve track/world/lesson ordering, and require no network service.
 
@@ -57,6 +57,12 @@ These are practical client-side isolation boundaries, not security boundaries
 equivalent to a server sandbox. The application contains no secrets and never injects
 runtime output as application HTML.
 
+## Adaptive command center
+
+`src/pages/CommandCenterPage.tsx` derives a decision-oriented learning snapshot from the existing progress record. The selector ranks unfinished work first, protects momentum in active tracks, calculates language/world synchronization, and summarizes continuity without introducing a second source of truth. The persisted focus window is the only new preference; recommendations remain fully derived.
+
+`SkillConstellation` renders a second, route-specific Three.js experience for language mastery. It uses deterministic node placement, pointer raycasting, drag rotation, viewport pausing, pixel-ratio bounds, WebGL context-loss recovery, geometry/material disposal, and a semantic fallback. The visual model never gates navigation or learning content.
+
 ## Spatial rendering
 
 `src/features/visual-lab/sceneModel.ts` owns deterministic nodes, edges, and step state.
@@ -73,12 +79,7 @@ canvas render.
 
 ## Storage migration
 
-Storage version 5 adds the adaptive/minimal/immersive visual-depth preference. Imports
-from version 1 first gain version 2 preferences; version 2 gains the bounded draft map;
-version 3 gains the v4 planning fields; version 4 gains the v5 spatial preference.
-Existing lesson IDs, task IDs, drafts, XP, streaks, achievement dates, bookmarks, and
-activity records remain unchanged. The five new worlds only append IDs, so previous
-completion remains valid.
+Storage version 6 adds the persisted 15/25/45-minute focus-window preference. Imports from version 1 still pass through every historical migration: preferences, bounded drafts, planning/bookmark fields, visual depth, and finally the v6 focus protocol. Existing lesson IDs, task IDs, drafts, XP, streaks, achievement dates, bookmarks, and activity records remain unchanged. The two v4.1 worlds only append IDs, so previous completion remains valid.
 
 ## Deployment
 

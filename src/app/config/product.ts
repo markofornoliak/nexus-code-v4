@@ -1,7 +1,7 @@
 export const PRODUCT = {
   name: "NEXUS",
   fullName: "NEXUS CODE",
-  version: "4.0.0",
+  version: "4.1.0",
   tagline: "Recover the logic. Rebuild the signal.",
   metaphor: "The Living Code Archive",
   description:

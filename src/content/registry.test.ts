@@ -17,16 +17,16 @@ describe("content registry", () => {
     ]);
   });
 
-  it("assembles the expanded ninety-lesson catalog", () => {
+  it("assembles the expanded one-hundred-lesson catalog", () => {
     const python = getTrack("python");
-    expect(python?.worlds).toHaveLength(8);
-    expect(python && getOrderedLessons(python)).toHaveLength(40);
+    expect(python?.worlds).toHaveLength(9);
+    expect(python && getOrderedLessons(python)).toHaveLength(45);
     expect(python?.worlds.every((world) => world.lessons.length === 5)).toBe(true);
     expect(
       tracks.reduce((total, track) => total + getOrderedLessons(track).length, 0),
-    ).toBe(90);
-    expect(tracks.reduce((total, track) => total + track.worlds.length, 0)).toBe(18);
-    expect(python?.worlds.at(-1)?.id).toBe("graph-nexus");
+    ).toBe(100);
+    expect(tracks.reduce((total, track) => total + track.worlds.length, 0)).toBe(20);
+    expect(python?.worlds.at(-1)?.id).toBe("automation-forge");
     expect(tracks.every((track) => track.status === "available")).toBe(true);
   });
 

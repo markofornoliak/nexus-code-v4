@@ -54,7 +54,7 @@ Match `editorLanguage`, `fileExtension`, action copy, and input support to the r
   expressed safely with the built-in modes.
 
 The registry test compiles every released regex, enforces global ID uniqueness,
-requires two standard tasks per lesson, and verifies the 90-lesson inventory.
+requires two standard tasks per lesson, and verifies the 100-lesson inventory.
 
 ## Author checklist
 

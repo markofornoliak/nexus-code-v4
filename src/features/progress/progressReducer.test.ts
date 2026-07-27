@@ -82,7 +82,7 @@ describe("progress reducer", () => {
     expect(cleared.drafts[firstTask.id]).toBeUndefined();
   });
 
-  it("stores v5 bookmarks, visual mode, and a bounded weekly goal", () => {
+  it("stores v6 bookmarks, visual mode, focus length, and a bounded weekly goal", () => {
     const bookmarked = progressReducer(structuredClone(defaultStoredState), {
       type: "toggle-bookmark",
       lessonId: entry.lesson.id,
@@ -106,8 +106,13 @@ describe("progress reducer", () => {
       type: "set-weekly-lesson-goal",
       goal: 80,
     });
-    expect(planned.preferences.theme).toBe("night-observatory");
-    expect(planned.preferences.visualMode).toBe("immersive");
-    expect(planned.preferences.weeklyLessonGoal).toBe(14);
+    const focused = progressReducer(planned, {
+      type: "set-focus-session-minutes",
+      minutes: 45,
+    });
+    expect(focused.preferences.theme).toBe("night-observatory");
+    expect(focused.preferences.visualMode).toBe("immersive");
+    expect(focused.preferences.weeklyLessonGoal).toBe(14);
+    expect(focused.preferences.focusSessionMinutes).toBe(45);
   });
 });

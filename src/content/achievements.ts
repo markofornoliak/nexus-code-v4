@@ -296,11 +296,47 @@ export const achievements: Achievement[] = [
   {
     id: "complete-nexus",
     name: "Complete Nexus",
-    description: "Restore all ninety NEXUS CODE v4 lesson fragments.",
+    description: "Restore the original ninety-fragment NEXUS CODE v4 foundation.",
     rarity: "mythic",
     icon: "core",
     condition: { type: "lesson-count", count: 90 },
     discoveryText: "The archive is no longer dormant. Every language sector answers.",
+  },
+  {
+    id: "automation-artificer",
+    name: "Automation Artificer",
+    description: "Restore every protocol inside the Python Automation Forge.",
+    rarity: "mythic",
+    icon: "engine",
+    condition: {
+      type: "world-completed",
+      trackId: "python",
+      worldId: "automation-forge",
+    },
+    discoveryText:
+      "The Orchestration Engine accepts a complete, audited automation protocol.",
+  },
+  {
+    id: "runtime-orchestrator",
+    name: "Runtime Orchestrator",
+    description: "Restore the JavaScript Runtime Orchestration sector.",
+    rarity: "mythic",
+    icon: "network",
+    condition: {
+      type: "world-completed",
+      trackId: "javascript",
+      worldId: "runtime-orchestration",
+    },
+  },
+  {
+    id: "century-nexus",
+    name: "Century Nexus",
+    description: "Restore one hundred complete lesson fragments across the archive.",
+    rarity: "mythic",
+    icon: "core",
+    condition: { type: "lesson-count", count: 100 },
+    discoveryText:
+      "One hundred recovered fragments synchronize into a self-sustaining archive.",
   },
   {
     id: "singularity-reactor",

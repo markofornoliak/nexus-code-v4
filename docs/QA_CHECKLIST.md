@@ -17,7 +17,7 @@ Use this checklist after any major layout, learning-engine, or deployment change
 - [ ] Every header link works from every route.
 - [ ] All five track cards open a dedicated track page.
 - [ ] Every map follows the correct locked / active / completed sequence.
-- [ ] Each of the 18 worlds exposes exactly five lesson nodes.
+- [ ] Each of the 20 worlds exposes exactly five lesson nodes.
 - [ ] The 3D Lab route opens from desktop, mobile, and command-palette navigation.
 - [ ] Lab tabs, scene steps, play/pause, speed, reset, and curriculum links work.
 - [ ] An unknown hash route renders the themed 404 screen.
@@ -95,3 +95,11 @@ Use this checklist after any major layout, learning-engine, or deployment change
 - [ ] No built URL points to `localhost` or assumes the domain root.
 - [ ] The landing page does not download Pyodide before a Python run.
 - [ ] Pyodide loads over HTTPS from the documented pinned CDN version.
+
+## Command Center v4.1
+
+- [ ] `/command` renders recommendations, focus controls, diagnostics, and activity pulse with JavaScript disabled only where expected.
+- [ ] The 3D constellation rotates by drag/touch, node activation opens the correct track, and Reset orbit rebuilds cleanly.
+- [ ] Minimal visual mode hides WebGL and exposes the complete semantic constellation fallback.
+- [ ] 320–390 px layouts keep all focus controls and recommendations inside the viewport.
+- [ ] Light and dark themes preserve readable conic score, progress bars, and focus states.
