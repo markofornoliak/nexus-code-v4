@@ -3,7 +3,7 @@ name: Import and verify NEXUS v4.1
 on:
   push:
     branches: ["main"]
-    paths: [".release/nexus-v4.1.retry4"]
+    paths: [".release/nexus-v4.1.retry5"]
 
 permissions:
   contents: write
@@ -39,7 +39,8 @@ jobs:
           sed -i 's/".sites-runtime"\]/".sites-runtime", "vendor"\]/' eslint.config.mjs
           sed -i '0,/title: "Lazy Signal Streams"/s//title: "Generator Pipelines"/' src/content/v41/pythonAutomationWorld.ts
           sed -i '0,/id: "python-decorators"/s//id: "python-decorator-protocols"/' src/content/v41/pythonAutomationWorld.ts
-          git add eslint.config.mjs src/content/v41/pythonAutomationWorld.ts
+          python -c 'from pathlib import Path; p=Path("src/features/progress/progressSelectors.ts"); s=p.read_text(); p.write_text(s.replace("        minutes: Math.min(\n          Math.max(10, focusMinutes - index * 2),\n          lesson.durationMinutes,\n        ),", "        minutes: Math.max(10, focusMinutes - index * 2),", 1))'
+          git add eslint.config.mjs src/content/v41/pythonAutomationWorld.ts src/features/progress/progressSelectors.ts
           git rm -r .release
           git rm .github/workflows/import-v41.yml
 
